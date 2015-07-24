@@ -1,0 +1,122 @@
+import java.util.ArrayList;
+public class Cage {
+	private int targetValue;
+	private String operator;
+	private int numOfSquares;
+	private Permutation p ;
+	private ArrayList<Integer> values ;
+
+	
+	public Cage ()
+	{} //no parameter creation of cages
+	
+	public Cage (int t,  String o, int s){
+		targetValue = t;;
+		operator = o;
+		numOfSquares = s;
+		values = new ArrayList<Integer>() ;
+		p = new Permutation ();
+	}
+	
+
+	public boolean addToCage(int a){
+		if(values.size() == numOfSquares)
+			return false;
+		values.add (a);
+
+
+		if (operator.equals("+") ){
+			int sum =0;
+				for (int i = 0; i< values.size() ; i++){
+					sum += values.get(i);
+				}
+					
+					if (values.size() == sum){
+						if (sum == targetValue)
+							return true;
+					}
+					if(values.size() < numOfSquares){
+						if(sum < targetValue)
+							return true;
+					}
+				
+		}
+		
+		
+		if (operator.equals("*") ){
+			int sum =1;
+				for (int i = 0; i< values.size() ; i++){
+					sum *= values.get(i);
+				}
+					
+					if (values.size() == sum){
+						if (sum == targetValue)
+							return true;
+					}
+					if(values.size() < numOfSquares){
+						if(sum < targetValue)
+							return true;
+					}
+				
+		}
+		
+		
+		if (operator.equals("/") ){
+			ArrayList <ArrayList <Integer>> perm = p.permutation(values);
+			for (int i = 0; i< perm.size() ; i++){
+				ArrayList<Integer> tempAr = perm.get(i);
+				int sum =0;
+				for (int l =0; l < tempAr.size(); l ++ ){
+					sum = sum /tempAr.get(l);						
+				}
+				if (values.size() == numOfSquares){
+					if (sum == targetValue){
+						return true;
+					}
+				}	
+				
+				else if(values.size() < numOfSquares){
+					if(sum < targetValue){
+						return true;
+					}
+				}
+			}
+	}
+		if (operator.equals("-") ){
+			ArrayList <ArrayList <Integer>> perm = p.permutation(values);
+			for (int i = 0; i< perm.size() ; i++){
+				ArrayList<Integer> tempAr = perm.get(i);
+				int sum =targetValue;
+				for (int l =0; l < tempAr.size(); l ++ ){
+					sum = sum - tempAr.get(l);						
+				}
+				if (values.size() == numOfSquares){
+					if (sum == 0){
+						return true;
+					}
+				}	
+				
+				else if(values.size() < numOfSquares){
+					if(sum ){
+						return true;
+					}
+				}
+			}
+	}
+
+		if (operator.equals("")){
+			if (values.get(0) == targetValue)
+				return true;
+		}
+
+		return false;	
+}		
+		
+		
+	
+	public int returnTargetValue (){
+		return targetValue;
+	}
+
+}
+

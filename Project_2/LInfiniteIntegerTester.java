@@ -16,8 +16,7 @@ public class LInfiniteIntegerTester
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		
-		do
-		{
+		do		{	
 			option = in.nextInt();
 			if(option != 1 && option != 2)
 			{
@@ -521,6 +520,7 @@ public class LInfiniteIntegerTester
 				InfiniteIntegerInterface y = new LInfiniteInteger(j);
 
 				if(!((i + j) + "").equals(x.plus(y).toString()))
+					
 				{
 					System.out.println("FAIL");
 					System.out.println("InfiniteInteger x was constructed using the following statement:");

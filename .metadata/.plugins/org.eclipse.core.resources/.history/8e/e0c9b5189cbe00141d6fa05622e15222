@@ -1,0 +1,107 @@
+
+
+public class Tester {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		InfiniteIntegerInterface gd1 = new LInfiniteInteger("5");
+		System.out.println(gd1.toString());
+		InfiniteIntegerInterface gd2 = new LInfiniteInteger("5");
+		//InfiniteIntegerInterface gd3 = new LInfiniteInteger("563");
+		//System.out.println(gd2.minus(gd3));
+		
+		//System.out.println(((LInfiniteInteger) gd1).getBackValue(1));
+		//System.out.println(((LInfiniteInteger) gd2).getBackValue(3)); 
+		//System.out.println("Minus Result: " +gd1.minus(gd2));
+		
+		System.out.println("Multiply Result: "+(gd1.multiply(gd2).toString()));
+		int division = 5*5;
+		if(gd1.multiply(gd2).equals(division) == false){
+			System.out.println("fail");
+		}
+		division = 4678 % 1000;
+		System.out.println(division);
+		
+		
+		///InfiniteIntegerInterface gd3= gd1.plus(gd2);
+		
+	//    System.out.println(gd3.toString());
+	}
+
+}
+/*
+ * LInfiniteInteger I2 = new LInfiniteInteger(I1.toString());
+		LInfiniteInteger myIntegerCopy = new LInfiniteInteger(this.toString());
+		LInfiniteInteger A1 = new LInfiniteInteger();
+		LInfiniteInteger returnInteger = new LInfiniteInteger(0);
+		 int carry = 0;
+		 int count = 0;
+		 for(int i = 1; i<=myIntegerCopy.getLargestLength(I2); i++){
+		
+			 for (int o = 1; o <= myIntegerCopy.getNumberOfDigits(); o++){
+				 int tempSum= (myIntegerCopy.getBackValue(o)+carry) * I2.getBackValue(i);
+				 if(tempSum >= 100){
+					 int Sum= tempSum % 100;
+					 carry = tempSum/100;
+					 ((LInfiniteInteger) A1).appendToFront(Sum);
+				 }
+				  if(tempSum >= 10 && tempSum <100){
+
+					int Sum = tempSum % 10;
+					carry = tempSum / 10;
+					((LInfiniteInteger) A1).appendToFront(Sum);
+				 }
+			
+				  else{
+					  ((LInfiniteInteger) A1).appendToFront(tempSum);
+					  carry = 0;
+				  	}
+				  }
+			  if(count > 0){
+				  for(int i1= 1; i1 <= count; i1++)
+				  ((LInfiniteInteger) A1).appendToBack(0);
+			  }
+			 if (carry > 100 ) {
+				 //int temp
+			 }
+			 if (carry > 10 && carry < 100){
+				 int temp = carry % 10;
+				 ((LInfiniteInteger) A1).appendToFront(temp);
+				 temp = carry / 10;
+				 ((LInfiniteInteger) A1).appendToFront(temp);
+			 }
+			 if(carry > 0 && carry <10 ){
+				 ((LInfiniteInteger) A1).appendToFront(carry);
+				 carry=0;
+			 }
+			 returnInteger = (LInfiniteInteger) returnInteger.add(A1);
+			// System.out.println("returnInteger :" +returnInteger);
+			 //System.out.println("A1 : "+A1);
+			 A1 = new LInfiniteInteger();
+			 count++;
+		 } 
+			 return returnInteger;
+ */
+/*
+private int getBackValue (int i){
+int middP= numberOfDigits/2;
+Node currNode=lastNode;
+int nodeIndex=0;
+
+if(i > middP){
+	if(i==0)
+		return currNode.data;
+	else {
+		while (i != nodeIndex)
+			currNode = currNode.previous;
+		return currNode.data;
+	}
+}
+else {
+	currNode = firstNode;
+	while( nodeIndex != i)
+		currNode = currNode.next;
+	return currNode.data;
+}
+}
+*/

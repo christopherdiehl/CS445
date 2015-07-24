@@ -1,0 +1,43 @@
+import javax.swing.JFrame;
+
+public class THSolverFrame
+{
+	public static void main(String[] args) throws InterruptedException
+	{
+		int numberOfDiscs = 10;
+		TowerOfHanoi towers = new TowerOfHanoi(numberOfDiscs);
+		THComponent thc = new THComponent(towers);
+		
+		
+		JFrame frame = new JFrame();
+		frame.setTitle("Tower of Hanoi");
+		frame.setSize(500,500);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		frame.add(thc);
+		
+		frame.setVisible(true);
+		
+		Thread.sleep(5000);
+		int numOfDiscs = towers.getNumberOfDiscs();
+		int [] startPole = 
+		solveTower(towers, thc, numOfDiscs);
+		
+		System.out.println("DONE!!!");
+	}
+	
+	public static void solveTower(TowerOfHanoi towers, THComponent thc, int numOfDiscs, int [] startPole, int [] endPole, int [] tempPole) throws InterruptedException
+	{
+		if(numOfDiscs== 1){
+			towers.moveTopDisc(0,2);
+			thc.repaint();
+			Thread.sleep(100);
+		}
+		else{
+			solveTower(towers , thc , numOfDiscs-1);
+			towers.moveTopDisc(0,2);
+			solveTower(towers, thc, numOfDiscs -1);
+		}
+	}
+	
+}

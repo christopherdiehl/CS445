@@ -1,20 +1,28 @@
 
+
 public class LInfiniteInteger implements InfiniteIntegerInterface
 {
 	private Node firstNode;
 	private Node lastNode;
 	private int numberOfDigits;
 	private boolean isNegative;
-	
+	private InfiniteIntegerInterface returnInteger;
 	/**
 	 * Constructor: Constructs this infinite integer from a string
 	 * representing an integer.
 	 * @param s  a string represents an integer
 	 */
+	public LInfiniteInteger(){
+		numberOfDigits = 0;
+		firstNode = null;
+	}
 	public LInfiniteInteger(String s)
 	{
-		LInfiniteCreator (s);
+		numberOfDigits=0;
 		firstNode= null;
+		LInfiniteCreator (s);
+
+
 
 	}
 
@@ -24,11 +32,13 @@ public class LInfiniteInteger implements InfiniteIntegerInterface
 	 */
 	public LInfiniteInteger(int anInteger)
 	{
-
+		numberOfDigits=0;
+		firstNode= null;
 		Integer temp= (Integer) anInteger;
 		String str= temp.toString();
 		LInfiniteCreator(str);
-		firstNode= null;
+
+
 		
 	}
 	/**
@@ -51,8 +61,9 @@ public class LInfiniteInteger implements InfiniteIntegerInterface
 				 numberOfDigits++;
 		     }
 		     else{
-		    	Node tempNode= new Node(null, digit, firstNode);
-		    	firstNode = tempNode;
+				Node newNode = new Node(lastNode, digit, null);
+				lastNode.next = newNode;
+				lastNode = newNode;
 				numberOfDigits++;
 
 		     }
@@ -84,7 +95,7 @@ public class LInfiniteInteger implements InfiniteIntegerInterface
 			if(firstNode.next == null && firstNode.data ==0)
 				break;
 			else if(firstNode.data == 0){
-				firstNode=firstNode.next;
+				firstNode = firstNode.next;
 				numberOfDigits--;
 			}
 			else{
@@ -113,6 +124,11 @@ public class LInfiniteInteger implements InfiniteIntegerInterface
 	{
 		return isNegative;
 	}
+	
+	private void setNegative(boolean bInput)
+	{
+		isNegative = bInput;
+	}
 
 	/**
 	 * Calculates the result of this infinite integer plus anInfiniteInteger
@@ -124,8 +140,59 @@ public class LInfiniteInteger implements InfiniteIntegerInterface
 	public InfiniteIntegerInterface plus(final InfiniteIntegerInterface anInfiniteInteger)
 	{		
 		// TO DO
-		return anInfiniteInteger;
+		LInfiniteInteger outsideInteger = new LInfiniteInteger(anInfiniteInteger.toString());
+		LInfiniteInteger myIntegerCopy = new LInfiniteInteger(this.toString());
+		if (outsideInteger.isNegative() && myIntegerCopy.isNegative()){
+			
+			InfiniteIntegerInterface returnInteger = this.add(outsideInteger);
+			((LInfiniteInteger) returnInteger).setNegative(true);
+			return returnInteger;
+		}
+		if (outsideInteger.isNegative()){
+			InfiniteIntegerInterface returnInteger = myIntegerCopy.subtract(outsideInteger);
+			return returnInteger;
+		}
+		
+		if (myIntegerCopy.isNegative()){
+			InfiniteIntegerInterface returnInteger = outsideInteger.subtract(myIntegerCopy);
+			return returnInteger;
+		}
+		
+		else{
+			InfiniteIntegerInterface returnInteger = this.add((LInfiniteInteger) anInfiniteInteger);
+			return returnInteger;
+		}
+
 	}
+	
+	private InfiniteIntegerInterface add(LInfiniteInteger I1){
+		LInfiniteInteger I2 = new LInfiniteInteger(I1.toString());
+		LInfiniteInteger myIntegerCopy = new LInfiniteInteger(this.toString());
+		 returnInteger = new LInfiniteInteger();
+		 int carry = 0;
+		
+		for (int i = 1; i <= myIntegerCopy.getLargestLength(I2); i++){
+			//int tempSum= myIntegerCopy.getBackValue(i) + I2.getBackValue(i);
+			int tempSum= myIntegerCopy.getBackValue(i) + I2.getBackValue(i) + carry;
+				if(tempSum >= 10){
+					//myIntegerCopy.addChangeNumber(i+1);
+					tempSum -= 10;
+					carry = 1;
+					((LInfiniteInteger) returnInteger).appendToFront(tempSum);
+				}
+			
+				else{
+					((LInfiniteInteger) returnInteger).appendToFront(tempSum);
+					carry = 0;
+					}
+			 //index= myIntegerCopy.getLargestLength(I2);
+		}
+		if(carry == 1)
+			((LInfiniteInteger) returnInteger).appendToFront(1);
+		returnInteger=  new LInfiniteInteger(returnInteger.toString());
+		return returnInteger;
+	}
+	
 
 	/**
 	 * Calculates the result of this infinite integer subtracted by anInfiniteInteger
@@ -135,10 +202,167 @@ public class LInfiniteInteger implements InfiniteIntegerInterface
 	 */
 	public InfiniteIntegerInterface minus(final InfiniteIntegerInterface anInfiniteInteger)
 	{
-		// TO DO
-		return anInfiniteInteger;
+		if (this.isNegative()  && anInfiniteInteger.isNegative()){
+			returnInteger = ((LInfiniteInteger) anInfiniteInteger).subtract((this));
+
+		}
+		else if (this.isNegative()){
+			returnInteger = this.add((LInfiniteInteger) anInfiniteInteger);
+			((LInfiniteInteger) returnInteger).setNegative(true);
+		}
+		else if(anInfiniteInteger.isNegative()){
+			returnInteger = this.add((LInfiniteInteger) anInfiniteInteger);
+		}
+		else {
+			returnInteger = this.subtract((LInfiniteInteger) anInfiniteInteger);
+		}
+		
+		return returnInteger;
 	}
 	
+	private InfiniteIntegerInterface subtract(LInfiniteInteger I2){
+		LInfiniteInteger myIntegerCopy = new LInfiniteInteger(this.toString());
+		InfiniteIntegerInterface returnInteger= new LInfiniteInteger();
+
+		myIntegerCopy.setNegative(false);
+		I2.setNegative(false);
+		int compareResult =myIntegerCopy.compareTo(I2);
+		if(compareResult == 0){
+			((LInfiniteInteger) returnInteger).appendToFront(0);
+			return returnInteger;
+		}
+
+		else if(compareResult ==1){
+			int index= this.getLargestLength(I2);
+		
+			for (int i = 1; i <= index; i++){
+				int tempSum= myIntegerCopy.getBackValue(i)-I2.getBackValue(i);
+					if(tempSum < 0){
+						myIntegerCopy.subChangeNumber(i+1, -1);
+						tempSum += 10;
+						((LInfiniteInteger) returnInteger).appendToFront(tempSum);
+					}
+				
+					else{
+						((LInfiniteInteger) returnInteger).appendToFront(tempSum);
+						}
+					
+			}
+			returnInteger=  new LInfiniteInteger(returnInteger.toString());
+			return returnInteger;
+			}	
+		else {
+			returnInteger= I2.minus(myIntegerCopy);
+			((LInfiniteInteger) returnInteger).setNegative(true);
+			return returnInteger;
+		}
+	}
+	
+	
+	
+	private void subChangeNumber (int i, int c){
+	
+			int middP= numberOfDigits/2;
+			Node currNode= firstNode;
+			int nodeIndex=1;
+			if(i > middP){ 
+				nodeIndex=this.getNumberOfDigits();
+					while(nodeIndex != i){
+						currNode= currNode.next;
+						nodeIndex--;
+					}
+					if(currNode.data > 0)
+					 currNode.data=currNode.data +c;
+					else{
+						currNode.previous.data = currNode.previous.data -1;
+						currNode.data += 9;
+					}
+			}
+			
+			else{
+				currNode = lastNode;
+	
+				while(i != nodeIndex){
+					currNode = currNode.previous;
+					nodeIndex++;
+					}
+				
+				
+					 if(currNode.data > 0)
+						 currNode.data=currNode.data +c;
+					 else{
+							currNode.previous.data = currNode.previous.data -1;
+							currNode.data += 9;
+						}
+			}	
+	}
+	private int getBackValue(int i){
+		if (i > this.getNumberOfDigits())
+		 return 0;
+		
+		int middP= numberOfDigits/2;
+		Node currNode= firstNode;
+		int nodeIndex=1;
+		if(i < middP){ 
+			nodeIndex=this.getNumberOfDigits();
+				while(nodeIndex != i){
+					currNode = currNode.next;
+					nodeIndex--;
+				}
+				return currNode.data;
+		}
+		
+		else{
+			currNode = lastNode;
+			if(i== 1)
+				return currNode.data;
+			while(i != nodeIndex){
+				currNode = currNode.previous;
+				nodeIndex++;
+				}
+			
+			return currNode.data;
+		}
+			
+		
+	}
+	private void appendToFront(int digit){
+		 if (firstNode==null){
+	    	 firstNode= new Node(null,digit,null);
+	    	 lastNode= firstNode;
+			 numberOfDigits++;
+	     }
+	     else{
+			Node newNode = new Node(null, digit, firstNode);
+			firstNode.previous = newNode;
+			firstNode = newNode;
+			numberOfDigits++;
+
+	     }
+
+	}
+	private void appendToBack(int digit){
+		if(firstNode == null){
+			firstNode= new Node(null, digit, null);
+			lastNode = firstNode;
+			numberOfDigits++;
+		}
+		else {
+			Node newNode = new Node (lastNode , digit, null);
+			lastNode.next = newNode;
+			lastNode = newNode;
+			numberOfDigits++;
+		}
+	}
+	
+	private int getLargestLength( LInfiniteInteger I2){
+		int i= this.getNumberOfDigits();
+		int c = I2.getNumberOfDigits();
+		if(i > c)
+			return i;
+		else 
+			return c;
+	}
 	/**
 	 * Generates a string representing this infinite integer. If this infinite integer
 	 * is a negative number a minus symbol should be in the front of numbers. For example,
@@ -174,24 +398,25 @@ public class LInfiniteInteger implements InfiniteIntegerInterface
 	 */
 	public int compareTo(InfiniteIntegerInterface anInfiniteInteger)
 	{	
+
+		int variableNumberOfDigits = anInfiniteInteger.getNumberOfDigits();
 		
-		int variableNumberOfDigits =anInfiniteInteger.getNumberOfDigits();
-		
-		if(variableNumberOfDigits > numberOfDigits)
+		if(variableNumberOfDigits > this.getNumberOfDigits())
 			return -1;
-		else if( numberOfDigits > variableNumberOfDigits)
+		else if( this.getNumberOfDigits() > variableNumberOfDigits)
 			return 1;
 		
-		int midP= numberOfDigits/2;
+		if(this.isNegative() && !anInfiniteInteger.isNegative())
+			return -1;
 		
-		for(int i=numberOfDigits; i < numberOfDigits; i++){
-			getFrontValue(i, midP);
-			
-			if(getFrontValue(i, midP) >  ((LInfiniteInteger) anInfiniteInteger).getFrontValue(i,midP))
+		if(anInfiniteInteger.isNegative() && !this.isNegative())
+			return 1;
+		
+		for(int i=1; i <= this.getNumberOfDigits(); i++){
+			if(this.getValue(i) >  ((LInfiniteInteger) anInfiniteInteger).getValue(i))
 				return 1;
 			
-			
-			if(((LInfiniteInteger) anInfiniteInteger).getFrontValue(i, midP) > getFrontValue(i, midP))
+			if(((LInfiniteInteger) anInfiniteInteger).getValue(i) > this.getValue(i))
 				return -1;
 			
 		}
@@ -206,51 +431,41 @@ public class LInfiniteInteger implements InfiniteIntegerInterface
 	 * @return
 	 */
 	
-	public int getBackValue (int i, int middP){
-		Node currNode=lastNode;
-		int nodeIndex=0;
-		
-		if(i > middP){
-			if(i==0)
-				return currNode.data;
-			else {
-				while (i != nodeIndex)
-					currNode = currNode.previous;
-				return currNode.data;
-			}
-		}
-		else {
-			currNode = firstNode;
-			while( nodeIndex != i)
-				currNode = currNode.next;
-			return currNode.data;
-		}
-	}
 	
 	/**
 	 * function to return the data of the first node or most significant
 	 * can be used with a for loop for easy retrieval of entire linked list
 	 * @param i
-	 * @return
+	 * @return value
 	 */
-	public int getFrontValue(int i, int middP){
+	public int getValue(int i){
+		int middP= numberOfDigits/2;
 		Node currNode= firstNode;
-		int nodeIndex=0;
+		int nodeIndex=1;
 		if(i < middP){ 
-			if(i==0)
+			if(i== 1)
 				return currNode.data;
 			else {
-				while(nodeIndex != i)
-			    currNode= currNode.next;
-				
+				while(nodeIndex != i){
+					currNode= currNode.next;
+					if(currNode==null)
+						return 0;
+					nodeIndex++;
+				}
 				return currNode.data;
 			}
 		}
 		
 		else{
 			currNode = lastNode;
-			while(i != nodeIndex)
+			nodeIndex=numberOfDigits;
+			while(i != nodeIndex){
 				currNode = currNode.previous;
+				if(currNode==null)
+					return 0;
+				nodeIndex--;
+			}
+
 			
 			return currNode.data;
 		}
@@ -266,9 +481,66 @@ public class LInfiniteInteger implements InfiniteIntegerInterface
 	public InfiniteIntegerInterface multiply(final InfiniteIntegerInterface anInfiniteInteger)
 	{
 		// TO DO
-		return anInfiniteInteger;
+		if(this.isNegative() && anInfiniteInteger.isNegative()){
+			if(this.compareTo(anInfiniteInteger) == -1 )
+				returnInteger= ((LInfiniteInteger) anInfiniteInteger).mult(this);
+			else{
+				returnInteger= this.mult((LInfiniteInteger) anInfiniteInteger);
+			}
+
+		}
+		else if (this.isNegative() || anInfiniteInteger.isNegative()){
+			returnInteger= this.mult((LInfiniteInteger) anInfiniteInteger);
+			LInfiniteInteger gdi = new LInfiniteInteger(0);
+			if(returnInteger.compareTo(gdi) != 0)
+				((LInfiniteInteger) returnInteger).setNegative(true);
+		}
+		
+		else {
+			returnInteger= this.mult((LInfiniteInteger) anInfiniteInteger);
+			//System.out.println("returnINteger" +returnInteger.toString());
+		}
+		return returnInteger; 
 	}
 	
+	private InfiniteIntegerInterface mult(LInfiniteInteger I1){
+		LInfiniteInteger I2 = new LInfiniteInteger(I1.toString());
+		LInfiniteInteger myIntegerCopy = new LInfiniteInteger(this.toString());
+		LInfiniteInteger A1 = new LInfiniteInteger();
+		LInfiniteInteger returnInteger = new LInfiniteInteger(0);
+		 int carry = 0;
+		 int count = 0;
+		 for(int i = 1; i<=myIntegerCopy.getLargestLength(I2); i++){
+		
+			 for (int o = 1; o <= myIntegerCopy.getNumberOfDigits(); o++){
+				 int tempSum= (myIntegerCopy.getBackValue(o)) * I2.getBackValue(i);
+				 tempSum += carry;
+				  if(tempSum >= 10 ){
+
+					int Sum = tempSum % 10;
+					carry = tempSum / 10;
+					((LInfiniteInteger) A1).appendToFront(Sum);
+				 }
+			
+				  else{
+					  ((LInfiniteInteger) A1).appendToFront(tempSum);
+					  carry = 0;
+				  	}
+				  }
+			 if(count > 0){
+				 for(int i1= 1; i1 <= count; i1++)
+					 ((LInfiniteInteger) A1).appendToBack(0);
+			 }
+			 if (carry > 0 ){
+				 A1.appendToFront(carry);
+				 carry = 0;
+			 }
+			 returnInteger = (LInfiniteInteger) returnInteger.add(A1);
+			 A1 = new LInfiniteInteger();
+			 count++;
+			  }
+		 return returnInteger;
+	}
 	private class Node
 	{
 		private int data; 

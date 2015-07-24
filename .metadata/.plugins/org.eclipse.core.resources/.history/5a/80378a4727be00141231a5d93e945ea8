@@ -1,0 +1,54 @@
+
+
+public class Tester {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		InfiniteIntegerInterface gd1 = new LInfiniteInteger("500");
+		System.out.println(gd1.toString());
+		InfiniteIntegerInterface gd2 = new LInfiniteInteger("499");
+		//InfiniteIntegerInterface gd3 = new LInfiniteInteger("563");
+		//System.out.println(gd2.minus(gd3));
+		
+		//System.out.println(((LInfiniteInteger) gd1).getBackValue(1));
+		//System.out.println(((LInfiniteInteger) gd2).getBackValue(3)); 
+		//System.out.println("Minus Result: " +gd1.minus(gd2));
+		
+		System.out.println("Multiply Result: "+(gd1.multiply(gd2).toString()));
+		if(gd1.multiply(gd1).toString().equals("") == false){
+			System.out.println("fail");
+		}
+		int division = 100*100;
+		System.out.println(division);
+		
+		
+		///InfiniteIntegerInterface gd3= gd1.plus(gd2);
+		
+	//    System.out.println(gd3.toString());
+	}
+
+}
+
+/*
+private int getBackValue (int i){
+int middP= numberOfDigits/2;
+Node currNode=lastNode;
+int nodeIndex=0;
+
+if(i > middP){
+	if(i==0)
+		return currNode.data;
+	else {
+		while (i != nodeIndex)
+			currNode = currNode.previous;
+		return currNode.data;
+	}
+}
+else {
+	currNode = firstNode;
+	while( nodeIndex != i)
+		currNode = currNode.next;
+	return currNode.data;
+}
+}
+*/

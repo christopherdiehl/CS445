@@ -1,0 +1,25 @@
+	private class Coordinate {
+		private int cageNumber;
+		private int r;
+		private int c;
+		private Coordinate (){}
+		
+		private int getR (){
+			return r;
+		}
+		private int getC(){
+			return c;
+		}
+		private void setR(int x){
+			r = x;
+		}
+		private void setC (int y){
+			c = y;
+		}
+		private void setCageNumber(int c){
+			cageNumber = c;
+		}
+		private int getCage(){
+			return cageNumber;
+		}
+	}

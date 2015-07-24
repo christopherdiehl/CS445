@@ -1,0 +1,11 @@
+
+public class test {
+	public static void main(String[] args)
+	{
+		int numDiscs = 7;
+		int point = 0;
+		
+		TowerOfHanoi t = new TowerOfHanoi(numDiscs);
+		int [] returnva = t.getArrayOfDiscs(1);
+	}
+}
